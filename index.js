@@ -1,43 +1,26 @@
-const express=require('express')
-const { Server } = require('socket.io')
-const {createServer}=require('http')
-const cors=require('cors')
+import express from 'express'
+import cors from 'cors'
+import connectionDB from './connnectionDB/connectionDB.js'
+import dotenv from 'dotenv'
+import router from './routers/routerprovider.js'
 const app=express()
+dotenv.config()
 const port=process.env.PORT||5000
 app.use(express.json())
 
-
-const server=new createServer(app)
-const io =new Server(server,{
-    cors:{
-        origin:"http://localhost:5173",
-        methods:['GET',"POST"],
-        credentials:true
-    }
-})
 app.use(cors({
     origin:"http://localhost:5173",
     methods:['GET',"POST"],
     credentials:true
 }))
+
+app.use('/api/auth',router)
+
 app.get('/',async(req,res)=>{
     return res.send('we socket .io server api')
 })
 
-io.on('connection',(socket)=>{
-    console.log('user connection',socket.id)
-    socket.on('message',(data)=>{
-        console.log("clinet message set", data)
-        // io.emit('receve-message',data)
-        socket.to(data.rome).emit('receve-message',data.message)
-    })
-   
-    // socket.broadcast.emit('welcome',`welcome to the server id ${socket.id}`)
-    socket.on('disconnect',()=>{
-        console.log(`user disconnected ${socket.id}`)
-    })
-})
-
-server.listen(port,()=>{
+app.listen(port,()=>{
+connectionDB()
     console.log(`we sockt server port is now ${port}`)
 })
