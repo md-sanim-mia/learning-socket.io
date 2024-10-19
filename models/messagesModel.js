@@ -25,5 +25,5 @@ default:[]
     }
 },{timestamps:true},{Collection:'message'})
 
-const Message=mongoose.models.message||mongoose('message',messageSchema)
+const Message=mongoose.models.message||mongoose.model('message',messageSchema)
 export default Message
