@@ -5,11 +5,11 @@ const MainLayout = () => {
   return (
     <div>
       <Siteber/>
-      <div className=" min-h-screen">
+      <div className="">
           {/* sticky header */}
           {/* dynamic content */}
-          <div className="flex-1 md:ml-64">
-            <div className="p-5">
+          <div className=" flex-1  ml-[357px] bg-[#F0FDF4] min-h-screen mr-2 p-2">
+            <div className="">
               <Outlet />
             </div>
           </div>

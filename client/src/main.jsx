@@ -9,14 +9,28 @@ import MainLayout from './layouts/MainLayout.jsx';
 import Signup from './Pages/Register/Signup.jsx';
 import Login from './Pages/Register/LoginPage/Login.jsx';
 import HomePage from './Pages/HomePage/HomePage.jsx';
+import { AuthProvider } from './Providers/AuthProvider.jsx';
+import VerifyUser from './utils/VerifyUser.jsx';
+import MessageBox from './Pages/MessageBox/MessageBox.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout></MainLayout>,
+    element:<VerifyUser>
+       <MainLayout></MainLayout>
+    </VerifyUser> ,
     children:[
      {
       path:"/",
-      element:<HomePage></HomePage>
+      element:<VerifyUser>
+        <HomePage></HomePage>
+      </VerifyUser>
+     },
+     {
+path:'/messagebox/:id',
+element:<MessageBox></MessageBox>,
+loader:({params})=>fetch(`http://localhost:5000/api/users/chater/${params.id}`,{credentials:'include'})
      }
      
     ]
@@ -32,8 +46,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <div className='max-w-screen-xl mx-auto'>
+  <div className=''>
+  <AuthProvider>
   <RouterProvider router={router} />
+  </AuthProvider>
+  <ToastContainer />
   </div>
   </StrictMode>,
 )
