@@ -6,13 +6,34 @@ import { BiSolidImageAdd } from "react-icons/bi";
 import { IoSend } from "react-icons/io5";
 import axios from 'axios';
 import { useAuth } from '../../Providers/AuthProvider';
+import { useSocketContext } from '../../Providers/SocketContext';
 const MessageBox = () => {
     const userData=useLoaderData()
     const [sendMessage,setSendMessage]=useState(null)
     const[showMessage,setShowMessage]=useState([])
     const {authUser}=useAuth()
     const axiosPublice=useAxiosPublice()
+const {socket}=useSocketContext()
+
+//     const handileclickDelete=(e)=>{
+// console.log(e)
+
+
+//     }
 console.log(userData)
+
+useEffect(()=>{
+
+  socket?.on('newMessage',(newMessages)=>{
+const sound=new Audio()
+
+setShowMessage([...showMessage,newMessages])
+
+  })
+
+
+  return ()=>socket?.off('newMessage')
+},[socket,setShowMessage,showMessage])
 
 
 useEffect(()=>{
@@ -29,13 +50,18 @@ axios.get(`http://localhost:5000/api/message/${userData?._id}`,{withCredentials:
 
 const handileClickMessge=(e)=>{
   e.preventDefault()
-  const message=sendMessage
-axios.post(`http://localhost:5000/api/message/send/${userData?._id}`,{message},{withCredentials:true}).then(res=>{
-  console.log(res.data)
-  e.target.reset()
-}).catch(error=>{
-  console.log(error)
-})
+
+  if(sendMessage){
+    const message=sendMessage
+    axios.post(`http://localhost:5000/api/message/send/${userData?._id}`,{message},{withCredentials:true}).then(res=>{
+      console.log(res.data)
+      e.target.reset()
+      setSendMessage(null)
+    }).catch(error=>{
+      console.log(error)
+    })
+    
+  }
 
 }
 
@@ -77,14 +103,15 @@ axios.post(`http://localhost:5000/api/message/send/${userData?._id}`,{message},{
     key={mess?._id}
     className={`flex h-full w-full ${mess?.sinderId === authUser._id ? 'justify-end' : 'justify-start'}`}
   >
-    <span
+    <span onClick={()=>handileclickDelete(mess?._id)}
       className={`p-2 rounded-lg max-w-xs ${
         mess?.sinderId === authUser._id ? 'bg-[#10B981] text-white' : 'bg-gray-200 text-black'
       }`}
       
     >
       {mess?.message}
-    </span>
+    </span> 
+    {/* <button className='text-3xl ml-1'>:</button> */}
   </div> </>))
   }
 

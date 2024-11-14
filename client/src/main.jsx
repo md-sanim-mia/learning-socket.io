@@ -14,6 +14,7 @@ import VerifyUser from './utils/VerifyUser.jsx';
 import MessageBox from './Pages/MessageBox/MessageBox.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { SocketContextProvider } from './Providers/SocketContext.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -48,7 +49,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
   <div className=''>
   <AuthProvider>
-  <RouterProvider router={router} />
+ <SocketContextProvider> <RouterProvider router={router} /></SocketContextProvider>
   </AuthProvider>
   <ToastContainer />
   </div>

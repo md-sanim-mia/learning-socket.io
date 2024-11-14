@@ -15,12 +15,14 @@ const UserCard = ({users,handileClickActive,isActive}) => {
     },[])
 
     console.log(lastMessage)
-const messages=lastMessage?.message?.length> 18? lastMessage?.message.slice(0, 18)+'....':lastMessage?.message
+const messages=lastMessage?.message?.length> 15? lastMessage?.message.slice(0, 15)+'....':lastMessage?.message
 
-
+console.log(lastMessage?.updatedAt)
+const messageTime=new Date(lastMessage?.updatedAt)
 const currentTime=new Date()
-
-const finaleTime=currentTime-lastMessage.updatedAt
+console.log(currentTime)
+const finaleTime=currentTime-messageTime
+console.log(finaleTime)
 const seconds = Math.floor(finaleTime / 1000);
 const minutes = Math.floor(seconds / 60);
 const hours = Math.floor(minutes / 60);
@@ -38,14 +40,16 @@ const days = Math.floor(hours / 24);
     <img className='w-14 h-14 rounded' src={users?.profile} />
  <div>
  <h3 className='font-bold'>{users?.fullName}</h3>
-<div className='flex gap-3 mt-1 items-center'>
+<div className='flex  w-full gap-6 justify-between mt-1 items-center'>
 <p className=''>{messages}</p>
-<p className='text-sm text-right text-gray-400'>{
+<sub>
+<p className='text-[12px] text-right '>{
  days > 0 ? `${days} days` :
  hours > 0 ? `${hours} hours` :
  minutes > 0 ? `${minutes} minutes` :
  `${seconds} seconds`
 }</p>
+</sub>
 </div>
  </div>
   <div>
